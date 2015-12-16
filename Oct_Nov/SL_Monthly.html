@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="../build/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+    <script src="../build/nv.d3.js"></script>
+    <script src="lib/stream_layers.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        text {
+            font: 14px Lato;
+        }
+        svg {
+            display: block;
+        }
+        html, body, #chart1, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chart1" class='with-3d-shadow with-transitions'>
+    <svg></svg>
+</div>
+
+<script>
+
+       var long_short_data = [
+        {
+            key: 'Service Level T1',
+            values: [              
+                {
+                    "label" : "Oct-14" ,
+					"color" : "#1f77b4",
+                    "value" : 0.899961901491208
+                } ,
+                {
+                    "label" : "Nov-14" ,
+					"color" : "#1f77b4",
+                    "value" : 0.840466071067164
+
+                } ,
+                {
+                    "label" : "Dec-14" ,
+					"color" : "#1f77b4",
+                    "value" : 0.902365516427041
+                } ,
+                {
+                    "label" : "Jan-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.737646268785931
+                } ,
+                {
+                    "label" : "Feb-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.698620712085845
+                } ,
+                {
+                    "label" : "Mar-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.733739264931234
+                } ,
+                {
+                    "label" : "Apr-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.858449023582848
+                },
+				 {
+                    "label" : "May-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.844419891839313
+                },
+				 {
+                    "label" : "Jun-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.8443324346501
+                },
+				 {
+                    "label" : "Jul-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.844282726477774
+                },
+				 {
+                    "label" : "Aug-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.911734533602969
+                },
+				 {
+                    "label" : "Sep-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.918474959072843
+                },
+				 {
+                    "label" : "Oct-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.916396456138127
+                },
+				{
+                    "label" : "Nov-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.899154474634239
+                }
+            ]
+        },
+        {
+            key: 'T1 & T2',
+            values: [              
+                {
+                    "label" : "Oct-14" ,
+					"color" : "#aec7e8",
+                    "value" : 0.900336648566411
+                } ,
+                {
+                    "label" : "Nov-14" ,
+					"color" : "#aec7e8",
+                    "value" : 0.845035630097884
+                } ,
+                {
+                    "label" : "Dec-14" ,
+					"color" : "#aec7e8",
+                    "value" : 0.892279528092935
+                } ,
+                {
+                    "label" : "Jan-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.721812919798564
+                } ,
+                {
+                    "label" : "Feb-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.702464457332817
+                } ,
+                {
+                    "label" : "Mar-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.684393980982947
+                } ,
+                {
+                    "label" : "Apr-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.801185718842048
+                },
+				 {
+                    "label" : "May-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.846871198000635
+                },
+				 {
+                    "label" : "Jun-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.826979364713037
+                },
+				 {
+                    "label" : "Jul-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.814846792530141
+                },
+				 {
+                    "label" : "Aug-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.895787892873744
+                },
+				 {
+                    "label" : "Sep-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.907297826698748
+                },
+				 {
+                    "label" : "Oct-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.914489558074776
+                },
+				{
+                    "label" : "Nov-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.89287534510691
+                }				
+            ]
+        }
+    ];
+
+
+    var chart;
+    nv.addGraph(function() {
+        chart = nv.models.multiBarChart()
+            .x(function(d) { return d.label })
+            .y(function(d) { return d.value })
+            //.yErr(function(d) { return [-Math.abs(d.value * Math.random() * 0.3), Math.abs(d.value * Math.random() * 0.3)] })
+            //.barColor(d3.scale.category20().range())
+            .duration(250)
+            .forceY([.5, 1])
+			.showControls(false) //Allow user to switch between "Grouped" and "Stacked" mode.
+			//.showValues(true)
+            .margin({left: 100}) 
+            .margin({right: 100}) 
+            .stacked(false);
+
+        chart.yAxis.tickFormat(d3.format('.0%'));
+
+        chart.yAxis.axisLabel('Monthly');
+        chart.xAxis
+			//.ticks(20)
+			.axisLabel('')
+			.axisLabelDistance(20);
+
+
+
+        d3.select('#chart1 svg')
+            .datum(long_short_data)
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+
+        chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+        chart.state.dispatch.on('change', function(state){
+            nv.log('state', JSON.stringify(state));
+        });
+        return chart;
+    });
+
+</script>
+</body>
+</html>

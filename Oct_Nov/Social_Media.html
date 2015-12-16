@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="../build/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+    <script src="../build/nv.d3.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        text {
+            font: 12px Lato;
+        }
+        svg {
+            display: block;
+        }
+        html, body, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class='with-3d-shadow with-transitions'>
+<button onclick="expandLegend();">Expand/Contract Legend</button>
+    <script>
+        var expandLegend = function() {
+            var exp = chart.legend.expanded();
+            chart.legend.expanded(!exp);
+            chart.update();
+        }
+    </script>
+<svg id="chart1"></svg>
+
+<script>
+
+    var histcatexplong = [
+        {
+            "key" : "NYC Twitter" ,
+            "values" : [ 
+			[ 1412208000000 , 83726] , 
+			[ 1414886400000 , 85256] , 
+			[ 1417478400000 , 87796] , 
+			[ 1420156800000 , 91100] , 
+			[ 1422835200000 , 93362] , 
+			[ 1425254400000 , 95204] , 
+			[ 1427932800000 , 96196] , 
+			[ 1430524800000 , 98618] , 
+			[ 1433203200000 , 100997] , 
+			[ 1435795200000 , 104099] , 
+			[ 1438473600000 , 106750] , 
+			[ 1441152000000 , 109475] ,
+			[ 1443744000000 , 113293] , 
+			[ 1446422400000 , 118154]
+			]
+        } ,
+		
+		 {
+            "key" : "ASP Twitter" ,
+            "values" : [  
+			[ 1412208000000 , 43379] , 
+			[ 1414886400000 , 44351] , 
+			[ 1417478400000 , 45500] , 
+			[ 1420156800000 , 48969] , 
+			[ 1422835200000 , 53076] , 
+			[ 1425254400000 , 54805] , 
+			[ 1427932800000 , 55622] , 
+			[ 1430524800000 , 57234] , 
+			[ 1433203200000 , 58605] , 
+			[ 1435795200000 , 60647] , 
+			[ 1438473600000 , 61987] , 
+			[ 1441152000000 , 64542] ,
+			[ 1443744000000 , 66698] , 
+			[ 1446422400000 , 69108]
+			]
+        } ,
+		
+		 {
+            "key" : "Facebook Likes" ,
+            "values" : [ 
+			[ 1412208000000 , 7603] , 
+			[ 1414886400000 , 7967] , 
+			[ 1417478400000 , 8482] , 
+			[ 1420156800000 , 9703] , 
+			[ 1422835200000 , 10672] , 
+			[ 1425254400000 , 11105] , 
+			[ 1427932800000 , 11434] , 
+			[ 1430524800000 , 11890] , 
+			[ 1433203200000 , 12420] , 
+			[ 1435795200000 , 12866] , 
+			[ 1438473600000 , 13228] , 
+			[ 1441152000000 , 13710] ,
+			[ 1443744000000 , 14240] , 
+			[ 1446422400000 , 14599]
+			]
+
+
+        },
+		 {
+            "key" : "Instagram" ,
+            "values" : [ 
+			[ 1412208000000 , 244] , 
+			[ 1414886400000 , 274] , 
+			[ 1417478400000 , 307] , 
+			[ 1420156800000 , 354] , 
+			[ 1422835200000 , 409] , 
+			[ 1425254400000 , 450] , 
+			[ 1427932800000 , 521] , 
+			[ 1430524800000 , 604] , 
+			[ 1433203200000 , 689] , 
+			[ 1435795200000 , 780] , 
+			[ 1438473600000 , 859] , 
+			[ 1441152000000 , 934] ,
+			[ 1443744000000 , 1039] , 
+			[ 1446422400000 , 1135]
+			]
+        }
+    ];
+
+    var colors = d3.scale.category20();
+
+    var chart;
+    nv.addGraph(function() {
+        chart = nv.models.stackedAreaChart()
+            .useInteractiveGuideline(true)
+            .interpolate("step")
+            .x(function(d) { return d[0] })
+            .y(function(d) { return d[1] })
+            .controlLabels({stacked: "Stacked"})
+			//.padData(true)
+			//.yDomain([0,3250000])
+            .duration(300);
+
+        chart.xAxis
+			//.ticks(10)
+			//.staggerLabels(true) 
+			.tickFormat(function(d) { return d3.time.format('%b-%y')(new Date(d)) });
+			
+		chart.xScale(d3.time.scale());
+		
+        chart.yAxis
+			.ticks(8)
+			.tickFormat(d3.format('.3s'));
+			
+			
+			//Example of how to customize the tooltip.
+		chart.interactiveLayer
+			.tooltip
+			.headerFormatter(function(d) {return "Date: " + d3.time.format('%b-%d')(new Date(d));})
+			//.valueFormatter(d3.format(',.2f'));
+			
+		chart.margin({left: 100}) 
+        chart.margin({right: 100}) 
+
+
+        chart.legend.vers('furious');
+
+        d3.select('#chart1')
+            .datum(histcatexplong)
+            .transition().duration(1000)
+            .call(chart)
+            .each('start', function() {
+                setTimeout(function() {
+                    d3.selectAll('#chart1 *').each(function() {
+                        if(this.__transition__)
+                            this.__transition__.duration = 1;
+                    })
+                }, 0)
+            });
+
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+
+
+</script>
+</body>
+</html>

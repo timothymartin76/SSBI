@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="../build/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+    <script src="../build/nv.d3.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        text {
+            font: 14px Lato;
+        }
+        svg {
+            display: block;
+        }
+        html, body, #chart1, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chart1">
+    <svg></svg>
+</div>
+
+<script>
+
+    historicalBarChart = [
+  {
+    key: "Total Talk Time",
+    values: [
+      
+      { 
+        "label" : "Oct-14" , 
+        "color" : "#ff7f0e",
+        "value" : 38914
+      } , 
+      { 
+        "label" : "Nov-14" , 
+        "color" : "#ff7f0e",
+        "value" : 34746
+      } , 
+      { 
+        "label" : "Dec-14" ,
+        "color" : "#ff7f0e",
+        "value" : 34644
+      } , 
+      { 
+        "label" : "Jan-15" , 
+        "color" : "#ff7f0e",
+        "value" : 46416
+      } , 
+      { 
+        "label" : "Feb-15" , 
+        "color" : "#ff7f0e",
+        "value" : 44322
+      } , 
+      { 
+        "label" : "Mar-15" , 
+        "color" : "#ff7f0e",
+        "value" : 46437
+      },
+      { 
+        "label" : "Apr-15" , 
+        "color" : "#ff7f0e",
+        "value" : 43890
+      },
+      { 
+        "label" : "May-15" , 
+        "color" : "#ff7f0e",
+        "value" : 42128
+      },
+      { 
+        "label" : "Jun-15" ,
+        "color" : "#ff7f0e",
+        "value" : 46294
+      },
+      { 
+        "label" : "Jul-15" , 
+        "color" : "#ff7f0e",
+        "value" : 45672
+      },
+      { 
+        "label" : "Aug-15" , 
+        "color" : "#ff7f0e",
+        "value" : 43321
+      },
+      { 
+        "label" : "Sep-15" , 
+        "color" : "#ff7f0e",
+        "value" : 42727
+      },
+	  { 
+        "label" : "Oct-15" , 
+        "color" : "#ff7f0e",
+        "value" : 40556
+      },
+	  { 
+        "label" : "Nov-15" , 
+        "color" : "#ff7f0e",
+        "value" : 36811
+      }
+    ]
+  }
+]
+;
+
+    nv.addGraph(function() {
+        var chart = nv.models.discreteBarChart()
+            .x(function(d) { return d.label })
+            .y(function(d) { return d.value })
+            .staggerLabels(false)
+            //.staggerLabels(historicalBarChart[0].values.length > 8)
+            .showValues(true)
+            .forceY([25000,50000])
+            .margin({left: 100}) 
+            .margin({right: 100}) 
+            .duration(300)
+
+
+    chart.yAxis
+        .axisLabel('Hours')
+         .tickFormat(d3.format('.2s'));
+         //.ticks(8);
+
+    chart.valueFormat(d3.format('.3s'));
+
+        d3.select('#chart1 svg')
+            .datum(historicalBarChart)
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>November 2015 Page Views</title>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="https://rawgit.com/gka/d3-jetpack/master/d3-jetpack.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+    body { font-family: 'Lato'; font-weight: 300; padding: 20px;}
+    th { text-align: left; }
+    th, td { padding: 0 1em 0.5ex 0;}
+    th.center, td.center { text-align: center; }
+    th.num, td.num { text-align: right; }
+    </style>
+</head>
+<body>
+    <script>
+
+    // the table rows, typically loaded from data file using d3.csv
+    var movies = [
+        { title: "Pay a Parking Ticket", year: "126,214"},
+        { title: "ASP or Street Cleaning", year: "104,578"},
+        { title: "Affordable Housing", year: "51,209"},
+        { title: "Food Stamps", year: "36,556"},
+        { title: "Recycling or Trash Collection Schedule ", year: "28,956"},
+        { title: "Property Records", year: "27,837"},
+        { title: "NYC Jobs", year: "26,737"},
+        { title: "Civil Service Exams", year: "23,855"},
+        { title: "Housing & Development", year: "23,448"},
+        { title: "New York City Housing Lottery", year: "19,720"}
+    ];
+
+    // column definitions
+    var columns = [
+        { head: 'Page Title (Nov-15)', cl: 'title', html: ƒ('title') },
+        { head: 'Service Views', cl: 'center', html: ƒ('year') }
+    ];
+
+    // create table
+    var table = d3.select('body')
+        .append('table');
+
+    // create table header
+    table.append('thead').append('tr')
+        .selectAll('th')
+        .data(columns).enter()
+        .append('th')
+        .attr('class', ƒ('cl'))
+        .text(ƒ('head'));
+
+    // create table body
+    table.append('tbody')
+        .selectAll('tr')
+        .data(movies).enter()
+        .append('tr')
+        .selectAll('td')
+        .data(function(row, i) {
+            return columns.map(function(c) {
+                // compute cell values for this specific row
+                var cell = {};
+                d3.keys(c).forEach(function(k) {
+                    cell[k] = typeof c[k] == 'function' ? c[k](row,i) : c[k];
+                });
+                return cell;
+            });
+        }).enter()
+        .append('td')
+        .html(ƒ('html'))
+        .attr('class', ƒ('cl'));
+
+    function length() {
+        var fmt = d3.format('02d');
+        return function(l) { return Math.floor(l / 60) + ':' + fmt(l % 60) + ''; };
+    }
+
+
+    </script>
+</body>
+</html>

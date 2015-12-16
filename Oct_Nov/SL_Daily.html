@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="../build/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+    <script src="../build/nv.d3.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        text {
+            font: 12px sans-serif;
+        }
+        svg {
+            display: block;
+        }
+        html, body, #chart1, svg {
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+ <script>
+        var expandLegend = function() {
+            var exp = chart.legend.expanded();
+            chart.legend.expanded(!exp);
+            chart.update();
+        }
+    </script>
+
+<div id="chart1">
+    <svg></svg>
+</div>
+
+<script>
+
+    // Wrapping in nv.addGraph allows for '0 timeout render', stores rendered charts in nv.graphs,
+    // and may do more in the future... it's NOT required
+    nv.addGraph(function() {
+        var chart = nv.models.lineChart()
+            .useInteractiveGuideline(true)
+			//.interpolate("cardinal")
+            .x(function(d) { return d[0] })
+            .y(function(d) { return d[1] })
+			.yDomain([.5,1])
+			.margin({left: 100}) 
+            .margin({right: 100}) 
+            .color(d3.scale.category10().range())
+
+            .duration(300)
+           // .clipVoronoi(false);
+        chart.dispatch.on('renderEnd', function() {
+            console.log('render complete: cumulative line with guide line');
+        });
+
+        chart.xAxis.tickFormat(function(d) {
+            return d3.time.format('%b-%d')(new Date(d))
+        });
+
+    
+			
+		chart.yAxis.tickFormat(d3.format('.0%'));
+		chart.yAxis.axisLabel('Daily');
+			
+		chart.xScale(d3.time.scale());
+
+        d3.select('#chart1 svg')
+            .datum(cumulativeTestData())
+            .call(chart);
+
+        //TODO: Figure out a good way to do this automatically
+        nv.utils.windowResize(chart.update);
+
+        chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+        chart.state.dispatch.on('change', function(state){
+            nv.log('state', JSON.stringify(state));
+        });
+
+        return chart;
+    });
+
+
+    function cumulativeTestData() {
+        return [
+		 {
+            "key" : "Service Level Daily" ,
+            "values" : 
+			[			
+			
+			//October - Sept 30th appears for Oct 1st and pushes all date by 1 day retaining previous data value
+			[1443700800000,	0.921083474],
+			[1443787200000,	0.890883356],
+			[1443873600000,	0.905685877],
+			[1443960000000,	0.918101495],
+			[1444046400000,	0.987842962],
+			[1444132800000,	0.934979005],
+			[1444219200000,	0.971422914],
+			[1444305600000,	0.979197032],
+			[1444392000000,	0.943374858],
+			[1444478400000,	0.832279251],
+			[1444564800000,	0.927955353],
+			[1444651200000,	0.97443205],
+			[1444737600000,	0.950271996],
+			[1444824000000,	0.952290202],
+			[1444910400000,	0.817873077],
+			[1444996800000,	0.80719445],
+			[1445083200000,	0.64624638],
+			[1445169600000,	0.609030717],
+			[1445256000000,	0.900929482],
+			[1445342400000,	0.9446],
+			[1445428800000,	0.932862671],
+			[1445515200000,	0.985995378],
+			[1445601600000,	0.972336882],
+			[1445688000000,	0.907325789],
+			[1445774400000,	0.924108459],
+			[1445860800000,	0.973260117],
+			[1445947200000,	0.945490982],
+			[1446033600000,	0.95131973],
+			[1446120000000,	0.983477902],
+			[1446206400000,	0.88400754],
+			[1446292800000,	0.823889569],
+			//November 2015
+			[1446379200000,	0.670997077],
+			[1446465600000,	0.932928963],
+			[1446552000000,	0.959108732],
+			[1446638400000,	0.937353702],
+			[1446724800000,	0.862806116],
+			[1446811200000,	0.938226642],
+			[1446897600000,	0.963402448],
+			[1446984000000,	0.94447641],
+			[1447070400000,	0.863196982],
+			[1447156800000,	0.984900891],
+			[1447243200000,	0.985372759],
+			[1447329600000,	0.976161487],
+			[1447416000000,	0.871955744],
+			[1447502400000,	0.628087986],
+			[1447588800000,	0.930473169],
+			[1447675200000,	0.966794935],
+			[1447761600000,	0.914498382],
+			[1447848000000,	0.979758713],
+			[1447934400000,	0.911872018],
+			[1448020800000,	0.875814601],
+			[1448107200000,	0.844423396],
+			[1448193600000,	0.95175064],
+			[1448280000000,	0.772116325],
+			[1448366400000,	0.953349125],
+			[1448452800000,	0.988221081],
+			[1448539200000,	0.966861598],
+			[1448625600000,	0.974818609],
+			[1448712000000,	0.962618182],
+			[1448798400000,	0.947021764],
+			[1448884800000,	0.55178258]
+			]
+        }
+        ];
+    }
+
+</script>
+</body></html>

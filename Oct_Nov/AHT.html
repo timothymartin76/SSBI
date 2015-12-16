@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="../build/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+    <script src="../build/nv.d3.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        text {
+            font: 14px Lato;
+        }
+        svg {
+            display: block;
+        }
+        html, body, #chart1, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chart1">
+    <svg></svg>
+</div>
+
+<script>
+
+    historicalBarChart = [
+  {
+    key: "Average Handle Time",
+    values: [
+      
+      { 
+        "label" : "Oct-14" , 
+        "color" : "#1f77b4",
+        "value" : 279
+      } , 
+      { 
+        "label" : "Nov-14" , 
+        "color" : "#1f77b4",
+        "value" : 280
+      } , 
+      { 
+        "label" : "Dec-14" ,
+        "color" : "#1f77b4",
+        "value" : 276
+      } , 
+      { 
+        "label" : "Jan-15" , 
+        "color" : "#1f77b4",
+        "value" : 279
+      } , 
+      { 
+        "label" : "Feb-15" , 
+        "color" : "#1f77b4",
+        "value" : 278
+      } , 
+      { 
+        "label" : "Mar-15" , 
+        "color" : "#1f77b4",
+        "value" : 289
+      },
+      { 
+        "label" : "Apr-15" , 
+        "color" : "#1f77b4",
+        "value" : 291
+      },
+      { 
+        "label" : "May-15" , 
+        "color" : "#1f77b4",
+        "value" : 297
+      },
+      { 
+        "label" : "Jun-15" ,
+        "color" : "#1f77b4",
+        "value" : 299
+      },
+      { 
+        "label" : "Jul-15" , 
+        "color" : "#1f77b4",
+        "value" : 295
+      },
+      { 
+        "label" : "Aug-15" , 
+        "color" : "#1f77b4",
+        "value" : 304
+      },
+      { 
+        "label" : "Sep-15" , 
+        "color" : "#1f77b4",
+        "value" : 281
+      },
+	  { 
+        "label" : "Oct-15" , 
+        "color" : "#1f77b4",
+        "value" : 286
+      },
+	  { 
+        "label" : "Nov-15" , 
+        "color" : "#1f77b4",
+        "value" : 282
+      }
+    ]
+  }
+]
+;
+
+    nv.addGraph(function() {
+        var chart = nv.models.discreteBarChart()
+            .x(function(d) { return d.label })
+            .y(function(d) { return d.value })
+            .staggerLabels(false)
+            //.staggerLabels(historicalBarChart[0].values.length > 8)
+            .showValues(true)
+            .forceY([250,310])
+            .margin({left: 100}) 
+            .margin({right: 100}) 
+            .duration(300)
+
+
+    chart.yAxis
+        .axisLabel('Seconds')
+         .tickFormat(d3.format('.2s'))
+         .ticks(8);
+
+    chart.valueFormat(d3.format('.3s'));
+
+        d3.select('#chart1 svg')
+            .datum(historicalBarChart)
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+
+
+</script>
+</body>
+</html>

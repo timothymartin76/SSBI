@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rules</title>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="https://rawgit.com/gka/d3-jetpack/master/d3-jetpack.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+    body { font-family: 'Lato'; font-weight: 300; padding: 20px;}
+    th { text-align: left; }
+    th, td { padding: 0 1em 0.5ex 0;}
+    th.center, td.center { text-align: center; }
+    th.num, td.num { text-align: right; }
+    </style>
+</head>
+<body>
+    <script>
+
+    // the table rows, typically loaded from data file using d3.csv
+    var movies = [
+        { rules: "{Division Transfer,Find a Towed Vehicle - Plate Number Known} => {Find a Police Precinct or PSA by Location}", support: "0.0021", confidence: "0.09459", lift: "72.1803"},
+        { rules: "{IDNYC - Make an Appointment,IDNYC General Information} => {Documents Required to Apply for IDNYC}", support: "0.0017", confidence: "0.09355", lift: "68.3184"},
+		{ rules: "{Division Transfer,Find a Towed Vehicle - Accident, Filming, Street Event, or Construction} => {Find a Police Precinct or PSA by Location}", support: "0.0011", confidence: "0.8571", lift: "65.4042"},
+		{ rules: "{Find a Food Pantry or Soup Kitchen} => {Division Information Provided}", support: "0.002", confidence: "0.5397", lift: "46.8533"},
+		{ rules: "{IDNYC General Information} => {Documents Required to Apply for IDNYC}", support: "0.002", confidence: "0.6296", lift: "45.9819"},
+		{ rules: "{IDNYC - Make an Appointment,IDNYC Enrollment Centers} => {Documents Required to Apply for IDNYC}", support: "0.0021", confidence: "0.614", lift: "44.843"},
+		{ rules: "{IDNYC Enrollment Centers} => {Documents Required to Apply for IDNYC}", support: "0.0022", confidence: "0.5606", lift: "40.9411"},
+		{ rules: "{IDNYC Enrollment Centers} => {IDNYC - Make an Appointment}", support: "0.0033", confidence: "0.8636", lift: "39.5044"},	
+		{ rules: "{Reclaim a Towed Vehicle - NYPD} => {Find a Towed Vehicle - Plate Number Known}", support: "0.0019", confidence: "0.6275", lift: "36.4393"},
+		{ rules: "{Documents Required to Apply for IDNYC} => {IDNYC - Make an Appointment}", support: "	0.01", confidence: "0.7296", lift: "33.3739"},
+		{ rules: "{Find a Towed Vehicle - Accident, Filming, Street Event, or Construction} => {Find a Towed Vehicle - Plate Number Known}", support: "0.0032", confidence: "0.5612", lift: "32.5932"},
+		{ rules: "{Find a Towed Vehicle - Plate Number Unknown - NYPD} => {Find a Towed Vehicle - Plate Number Known}", support: "0.0029", confidence: "0.463", lift: "26.8866"},
+		{ rules: "{IDNYC General Information} => {IDNYC - Make an Appointment}", support: "0.0018", confidence: "0.5741", lift: "26.2593"},
+		{ rules: "{Service Request Status - HPD Status Not Found} => {Service Request Status - General}", support: "0.0015", confidence: "0.6667", lift: "22.7335"},
+		{ rules: "{Find a Police Precinct or PSA by Location} => {Division Transfer}", support: "	0.0074", confidence: "0.565", lift: "20.5876"},
+		{ rules: "{Fight a Parking Ticket - Appeal Hearing Decision} => {Parking Ticket Lookup - Ticket or Plate Number Known}", support: "0.0012", confidence: "0.6364", lift: "16.4565"},
+		{ rules: "{Pay a Parking Ticket - By Mail} => {Parking Ticket Lookup - Ticket or Plate Number Known}", support: "0.0015", confidence: "0.6341", lift: "16.3991"},
+		{ rules: "{Pay a Parking Ticket - Online} => {Parking Ticket Lookup - Ticket or Plate Number Known}", support: "0.0041", confidence: "0.5983", lift: "15.4719"},
+		{ rules: "{Parking Ticket Payment Problem or Pelty Adjustment} => {Parking Ticket Lookup - Ticket or Plate Number Known}", support: "0.0035", confidence: "0.59", lift: "15.2575"},
+		{ rules: "{Fight a Parking Ticket - Online} => {Parking Ticket Lookup - Ticket or Plate Number Known}", support: "0.0019", confidence: "0.4571", lift: "11.8218"},
+		{ rules: "{Pay a Parking Ticket - In Person} => {Parking Ticket Lookup - Ticket or Plate Number Known}", support: "	0.0011", confidence: "0.4091", lift: "10.5792"}	
+	];
+
+    // column definitions
+    var columns = [
+        { head: 'Rules', cl: 'title', html: ƒ('rules') },
+        { head: 'Support', cl: 'center', html: ƒ('support') },
+		{ head: 'Confidence', cl: 'center', html: ƒ('confidence') },
+		{ head: 'Lift', cl: 'center', html: ƒ('lift') }
+    ];
+
+    // create table
+    var table = d3.select('body')
+        .append('table');
+
+    // create table header
+    table.append('thead').append('tr')
+        .selectAll('th')
+        .data(columns).enter()
+        .append('th')
+        .attr('class', ƒ('cl'))
+        .text(ƒ('head'));
+
+    // create table body
+    table.append('tbody')
+        .selectAll('tr')
+        .data(movies).enter()
+        .append('tr')
+        .selectAll('td')
+        .data(function(row, i) {
+            return columns.map(function(c) {
+                // compute cell values for this specific row
+                var cell = {};
+                d3.keys(c).forEach(function(k) {
+                    cell[k] = typeof c[k] == 'function' ? c[k](row,i) : c[k];
+                });
+                return cell;
+            });
+        }).enter()
+        .append('td')
+        .html(ƒ('html'))
+        .attr('class', ƒ('cl'));
+
+    function length() {
+        var fmt = d3.format('02d');
+        return function(l) { return Math.floor(l / 60) + ':' + fmt(l % 60) + ''; };
+    }
+
+
+    </script>
+</body>
+</html>

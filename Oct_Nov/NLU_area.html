@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="../build/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+    <script src="../build/nv.d3.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        text {
+            font: 12px Lato;
+        }
+        svg {
+            display: block;
+        }
+        html, body, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class='with-3d-shadow with-transitions'>
+<button onclick="expandLegend();">Expand/Contract Legend</button>
+    <script>
+        var expandLegend = function() {
+            var exp = chart.legend.expanded();
+            chart.legend.expanded(!exp);
+            chart.update();
+        }
+    </script>
+<svg id="chart1"></svg>
+
+<script>
+
+    var histcatexplong = [
+        {
+            "key" : "Transferred to Agent" ,
+            "values" : [  
+			[ 1412208000000 , 360064] , 
+			[ 1414886400000 , 338600] , 
+			[ 1417478400000 , 362487] , 
+			[ 1420156800000 , 398399] , 
+			[ 1422835200000 , 400502] , 
+			[ 1425254400000 , 421355] , 
+			[ 1427932800000 , 383588] , 
+			[ 1430524800000 , 373955] , 
+			[ 1433203200000 , 410759] , 
+			[ 1435795200000 , 414817] , 
+			[ 1438473600000 , 376112] , 
+			[ 1441152000000 , 398708] ,
+			[ 1443744000000 , 383751] 
+			// [ 1446422400, ]
+			]
+        } ,
+		
+		 {
+            "key" : "Containment" ,
+            "values" : [  
+			[ 1412208000000 , 49323] , 
+			[ 1414886400000 , 44421] , 
+			[ 1417478400000 , 51157] , 
+			[ 1420156800000 , 51490] , 
+			[ 1422835200000 , 69513] , 
+			[ 1425254400000 , 73057] , 
+			[ 1427932800000 , 53712] , 
+			[ 1430524800000 , 46564] , 
+			[ 1433203200000 , 50815] , 
+			[ 1435795200000 , 52804] , 
+			[ 1438473600000 , 46463] , 
+			[ 1441152000000 , 53370] ,
+			[ 1443744000000 , 46135]  
+				// [ 1446422400, ]
+			]
+        } ,
+		
+		 {
+            "key" : "External Transfer" ,
+            "values" : [   
+			[ 1412208000000 , 83850] , 
+			[ 1414886400000 , 70258] , 
+			[ 1417478400000 , 73569] , 
+			[ 1420156800000 , 70214] , 
+			[ 1422835200000 , 64700] , 
+			[ 1425254400000 , 71924] , 
+			[ 1427932800000 , 69420] , 
+			[ 1430524800000 , 59525] , 
+			[ 1433203200000 , 67754] , 
+			[ 1435795200000 , 76757] , 
+			[ 1438473600000 , 66516] , 
+			[ 1441152000000 , 71161] ,
+			[ 1443744000000 , 60907]  
+				// [ 1446422400, ]
+			]
+        }
+
+    ];
+
+    var colors = d3.scale.category20();
+
+    var chart;
+    nv.addGraph(function() {
+        chart = nv.models.stackedAreaChart()
+            .useInteractiveGuideline(true)
+            .interpolate("step")
+            .x(function(d) { return d[0] })
+            .y(function(d) { return d[1] })
+            .controlLabels({stacked: "Stacked"})
+            .margin({left: 100}) 
+            .margin({right: 100}) 
+			//.padData(true)
+			//.yDomain([0,3250000])
+            .duration(300);
+
+        chart.xAxis
+			//.ticks(10)
+			//.staggerLabels(true) 
+			.tickFormat(function(d) { return d3.time.format('%b-%y')(new Date(d)) });
+			
+		chart.xScale(d3.time.scale());
+		
+        chart.yAxis
+			.ticks(8)
+			.tickFormat(d3.format('.3s'));
+			
+			//Example of how to customize the tooltip.
+		chart.interactiveLayer
+			.tooltip
+			.headerFormatter(function(d) {return "Date: " + d3.time.format('%b-%d')(new Date(d));})
+			//.valueFormatter(d3.format(',.2f'));
+			
+			
+        chart.legend.vers('furious');
+
+        d3.select('#chart1')
+            .datum(histcatexplong)
+            .transition().duration(1000)
+            .call(chart)
+            .each('start', function() {
+                setTimeout(function() {
+                    d3.selectAll('#chart1 *').each(function() {
+                        if(this.__transition__)
+                            this.__transition__.duration = 1;
+                    })
+                }, 0)
+            });
+
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+
+
+</script>
+</body>
+</html>

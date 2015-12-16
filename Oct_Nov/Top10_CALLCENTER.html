@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="../build/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+    <script src="../build/nv.d3.js"></script>
+    <script src="lib/stream_layers.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        text {
+            font: 14px Lato;
+        }
+        svg {
+            display: block;
+        }
+        html, body, #chart1, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chart1" class='with-3d-shadow with-transitions'>
+    <svg></svg>
+</div>
+
+<script>
+
+    var long_short_data = [    
+        {
+            key: 'Oct-15 Call Center',
+            values: [
+                {
+                    "label" : "HPD Maintenance" ,
+					"color" : "#2185C5",
+                    "value" : 30551
+                } ,
+                {
+                    "label" : "Heat/Hot Water" ,
+					"color" : "#2185C5",
+                    "value" : 18018
+                } ,
+                {
+                    "label" : "Noise - Residential" ,
+					"color" : "#2185C5",
+                    "value" : 8211
+                } ,
+                {
+                    "label" : "Blocked Driveway" ,
+					"color" : "#2185C5",
+                    "value" : 7463
+                } ,
+                {
+                    "label" : "Agency Issues" ,
+					"color" : "#2185C5",
+                    "value" : 7297
+                } ,
+                {
+                    "label" : "CFC Recovery" ,
+					"color" : "#2185C5",
+                    "value" : 6832
+                } ,
+                {
+                    "label" : "Illegal Parking" ,
+					"color" : "#2185C5",
+                    "value" : 4620
+                } ,
+                {
+                    "label" : "Water System" ,
+					"color" : "#2185C5",
+                    "value" : 3836
+                } ,
+                {
+                    "label" : "Noise" ,
+					"color" : "#2185C5",
+                    "value" : 3444
+                },
+				 {
+                    "label" : "DOF Literature Request" ,
+					"color" : "#2185C5",
+                    "value" : 2477
+                }
+            ]
+        },
+		
+		{
+            key: 'Nov-15 Call Center',
+            values: [
+                {
+                    "label" : "HPD Maintenance" ,
+					"color" : "#2185C5",
+                    "value" : 26527
+                } ,
+                {
+                    "label" : "Heat/Hot Water" ,
+					"color" : "#2185C5",
+                    "value" : 18968
+                } ,
+                {
+                    "label" : "Noise - Residential" ,
+					"color" : "#2185C5",
+                    "value" : 7856
+                } ,
+                {
+                    "label" : "Blocked Driveway" ,
+					"color" : "#2185C5",
+                    "value" : 7459
+                } ,
+                {
+                    "label" : "Agency Issues" ,
+					"color" : "#2185C5",
+                    "value" : 6812
+                } ,
+                {
+                    "label" : "CFC Recovery" ,
+					"color" : "#2185C5",
+                    "value" : 5550
+                } ,
+                {
+                    "label" : "Illegal Parking" ,
+					"color" : "#2185C5",
+                    "value" : 4210
+                } ,
+                {
+                    "label" : "Noise" ,
+					"color" : "#2185C5",
+                    "value" : 3322
+                } ,
+                {
+                    "label" : "Water System" ,
+					"color" : "#2185C5",
+                    "value" : 3208
+                },
+				 {
+                    "label" : "DOF Literature Request" ,
+					"color" : "#2185C5",
+                    "value" : 2529
+                }
+            ]
+        }
+    ];
+
+		
+	
+    var chart;
+    nv.addGraph(function() {
+        chart = nv.models.multiBarHorizontalChart()
+            .x(function(d) { return d.label })
+            .y(function(d) { return d.value })
+			
+            //.yErr(function(d) { return [-Math.abs(d.value * Math.random() * 0.3), Math.abs(d.value * Math.random() * 0.3)] })
+            //.barColor(d3.scale.category20().range())
+            .duration(250)
+			//.forceY([0,130000])
+			.showValues(true)
+            .margin({left: 200, right: 200})
+            .stacked(false);
+
+
+        chart.yAxis
+			.tickFormat(d3.format('.2s'))
+			.axisLabelDistance(50);
+
+        //chart.xAxis.axisLabel('').axisLabelDistance(20);
+		
+		chart.valueFormat(d3.format('.2s'));
+		
+		chart.legend.vers('furious');
+
+        d3.select('#chart1 svg')
+            .datum(long_short_data)
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+
+        chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+        chart.state.dispatch.on('change', function(state){
+            nv.log('state', JSON.stringify(state));
+        });
+        return chart;
+    });
+	
+	
+	
+
+</script>
+</body>
+</html>
