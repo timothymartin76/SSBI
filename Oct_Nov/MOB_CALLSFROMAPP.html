@@ -119,7 +119,6 @@
             .showValues(true)
             //.forceY([0,3500000])
             .duration(300)
-			.showYAxis(false)
 			//.showXAxis(false)
 
 
@@ -129,7 +128,7 @@
          .tickFormat(d3.format('.2s'))
          .ticks(8);
 
-    chart.valueFormat(d3.format(','));
+    chart.valueFormat(d3.format('.3s'));
 
      chart.margin({left: 100}) 
       chart.margin({right: 100}) 
